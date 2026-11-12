@@ -50,6 +50,34 @@ Check: dark theme headings match the design file's weight on a Mac.
 ```
 Safari supports `hanging-punctuation: first`; the negative indent covers the rest for a known opening character.
 
+**P-TYPE-07 Line-height by role.** Unitless, so it scales with size. Display 1.1, headings 1.2 to 1.3, body 1.5 to 1.6. Anything that can wrap to three lines or more gets at least 1.4, even in a tight card. Pair each size with its line-height and weight in the text style, so a role is one decision.
+
+**P-TYPE-08 Weight floors.** Below 18px, weight 400 or heavier. Weights 100 to 300 only at 28px and up, and checked on both themes there. Emphasis inside a role is one weight step up (400 to 500), not a size change.
+
+**P-TYPE-09 Size floors and units.** Long-form reading text starts at 16px. UI text can go smaller: 14px for body, inputs and menus, 13px for metadata, rarely under 12px. Sizes in `rem`, never px, so the reader's own font size still applies.
+
+**P-TYPE-10 Headings descend with level.** h1 to h3 map to descending steps of the scale. A sub-heading never outweighs its parent, and a heading is never smaller than body text.
+
+**P-TYPE-11 Cap the measure.** Long-form text runs 60 to 75 characters a line (`max-width: 65ch` is a good default). UI text stays `text-align: start`; never justify in an app.
+
+**P-TYPE-12 Wrap and break on purpose.** `balance` on headings and short lines only (never paragraphs; Chromium ignores it past six lines), `pretty` on paragraphs. `overflow-wrap: break-word` wherever a long URL, ID or name could escape its box. `white-space: nowrap` on badges and short labels where a break looks broken.
+
+**P-TYPE-13 Truncate with a way back.** One line: `truncate`. Several: `line-clamp-N` (it needs `display: -webkit-box`, which the utility sets). Any cut value the user needs has a way to the whole: a tooltip that also opens on keyboard focus, an expand control or a detail view.
+
+**P-TYPE-14 Load what you use; properties over tags.** Every weight and style the design uses is loaded, so the browser never fakes a bold or italic. Use CSS properties (`font-weight: 650`, `font-variant-numeric: tabular-nums`) over `font-variation-settings` and `font-feature-settings`; keep raw tags for custom axes and stylistic sets only. Never `font-kerning: none`.
+
+**P-TYPE-15 Typographic punctuation.** Rendered strings use curly quotes, the single ellipsis character (…), en dashes for ranges (2–4 days) and a non-breaking space inside a value and its unit (10&nbsp;MB). Code keeps straight quotes. Store copy in natural case and set case with CSS.
+
+**P-TYPE-16 Underlines from the font.** Links take `text-underline-position: from-font` and `text-decoration-thickness: from-font`, or a set offset and thickness. Only the underline's colour animates. A dotted underline marks a term with more behind it.
+
+**P-TYPE-17 Inputs at 16px on mobile.** iOS Safari zooms the page when an input's text is under 16px. Turbo default: 16px inputs below the `sm` breakpoint, the design size above (`text-base sm:text-sm`). Never fix it by disabling zoom in the viewport meta.
+
+**P-TYPE-18 Trim text in tight boxes.** Buttons, badges and chips use `text-box: trim-both cap alphabetic` (progressive enhancement) so the label sits optically centred instead of low.
+
+**P-TYPE-19 Language and direction.** Set `lang` on `<html>` (quotes, hyphenation, pronunciation) and `dir` wherever direction changes. Wrap a user-supplied name, number or URL inside a sentence in `<bdi>`.
+
+**P-TYPE-20 Text stays selectable.** `user-select: none` only on a drag or gesture surface, never on a layout root or a text block. `::selection` may carry the brand if the pair stays legible.
+
 ## Icons and alignment
 
 **P-ALN-01 Optical alignment.** Centre for the eye, not the box. Shapes carry weight off-centre: a play triangle sits left in its box, so it moves right; stars and arrows often need a pixel up or down. This is per icon, never a global offset.
@@ -148,6 +176,22 @@ Check: at the top, the first row is crisp; at the bottom, the last row is crisp.
 
 **P-LAY-05 Squircles.** Not the default. Turbo corners are round. A client file may turn on `corner-shape: squircle` (or a superellipse mask) for marks and app icons only, with round corners as the fallback. Never mix the two shapes on surfaces of one family.
 
+**P-LAY-06 Space between groups is at least twice the space inside.** 8px inside a group means 16px or more between groups. Space first, a background second, a divider last.
+
+**P-LAY-07 Clearance between controls.** 12px between adjacent filled or outlined controls when no density system says otherwise. Borderless text and icon buttons need 24px between their visible glyphs, padding included, or keep their extended hit areas from touching. Turbo's dense rows keep their own spacing as long as targets don't overlap.
+
+**P-LAY-08 Logical properties.** Anything that would mirror in a right-to-left language uses inline start and end: `ms-*`, `pe-*`, `start-*`, `text-start`. Physical left and right only for physical geometry (safe areas).
+
+**P-LAY-09 Visual order is DOM order.** Never reorder with `order`, `flex-row-reverse` or grid placement: keyboard and screen readers follow the source.
+
+**P-LAY-10 Content bleeds, controls float.** Backgrounds and media may run to the viewport's edge; text and controls stay inside the margins and safe areas (`env(safe-area-inset-*)`, which needs `viewport-fit=cover`). Full-width buttons on mobile sit 16px in from the edges, never glued to them.
+
+**P-LAY-11 Nothing hides under sticky chrome.** A sticky header or footer sets `scroll-padding-block-start` / `-end` on the scroller to its height, so a focused field or an anchor target never lands under it. Anchored headings take `scroll-margin-block-start`.
+
+**P-LAY-12 Breakpoints from content.** Collapse a layout where it stops fitting, not at a device width. Reusable components adapt with container queries (`@container`), not viewport media queries. Test the smallest and largest supported sizes first.
+
+**P-LAY-13 Plan for growth.** Text containers take `min-height` and `max-width`, never a fixed height or width; button rows wrap. Grid tracks holding long content use `minmax(0, 1fr)`, flex children `min-w-0`. Full-height panes use `100dvh`, never `100vh`; widths use `100%`, never `100vw`. A modal taller than the screen scrolls its body and keeps its actions outside the scroll. Test with a long-string language and at 200% zoom.
+
 ## Motion
 
 **P-MOT-01 Button press.** Compact controls scale down while pressed and ease back on release.
@@ -201,6 +245,102 @@ Check: toggle twice fast (it reverses from where it is); tap five times fast (ev
 
 **P-MOT-11 Never `transition: all`.** List the properties. `will-change` only after you've seen a stutter, only for `transform`, `opacity` or `filter`.
 
+## Details
+
+**P-DET-01 No transitions during a theme switch.** Switching theme turns every transition off for one frame, then back on, or every colour fade fires at once and the page smears. Apply a `*{transition:none!important}` style, flip the theme, force a style read (`document.body.offsetHeight`), and remove the style two animation frames later. Same for the system theme changing underneath.
+
+**P-DET-02 Hover only where hover exists.** Hover styles live behind `@media (hover: hover)` (Tailwind 4's `hover:` already does this; Tailwind 3's does not). On touch, a hover state sticks after a tap and reads as selected. Controls that draw their own pressed state clear the grey tap flash with `-webkit-tap-highlight-color: transparent`.
+
+**P-DET-03 Scroll stays inside overlays.** Any dialog, drawer, menu or side panel that scrolls takes `overscroll-behavior: contain`, so reaching its end never scrolls the page behind.
+
+**P-DET-04 Edges survive forced colours.** A hairline drawn only as a `box-shadow` vanishes in Windows high contrast. Every control and card that relies on a shadow hairline also carries `border: 1px solid transparent`, which forced-colours mode paints.
+
+**P-DET-05 Icons drawn for their size.** Check every icon at the smallest size it renders (often 16px). Use the set's own size grid where it ships one rather than scaling a 24px drawing down. SVG only. Colours come from `currentColor`; no hex fills inside icon files. Turbo keeps outline icons in every state; the row's fill marks the active one.
+
+**P-DET-06 Icons in right-to-left.** Under `dir="rtl"` flip only what points with reading direction: back and forward arrows, chevrons, send, text-alignment and list glyphs. Never flip logos, checkmarks, clocks, physical objects or media playback controls. One flip per icon (`rtl:-scale-x-100`).
+
+**P-DET-07 Selected text looks like the brand, not broken.** If `::selection` is styled, the pair keeps at least 4.5:1.
+
+## Accessibility
+
+Findings cite a WCAG 2.2 A or AA criterion, or a task an assistive-technology user can't finish. Anything else is a recommendation.
+
+**P-A11Y-01 Native elements first.** `<button>` for actions, `<a href>` for navigation (it must open in a new tab on Cmd/Ctrl/middle click), native inputs for input. ARIA only where no element exists, and then the full keyboard map comes with it.
+
+**P-A11Y-02 Focus is visible and never hidden.** Style `:focus-visible`, never remove the outline without a replacement. A custom ring reaches 3:1 against everything it touches (1.4.11). A focused element is never fully covered by sticky chrome (2.4.11; P-LAY-11). Forced-colours mode keeps system colours.
+
+**P-A11Y-03 Keyboard reaches everything.** Every pointer action has a keyboard path. Tab moves between widgets, arrows move inside them (one tab stop per group, roving `tabindex`), Enter and Space activate, Escape closes whatever opened last. Only `tabindex` 0 and -1; never positive.
+
+| Widget | Keys |
+| --- | --- |
+| Dialog | Tab cycles inside, Escape closes |
+| Tabs | Arrows move and wrap, Home and End jump, Tab goes to the panel |
+| Menu button | Enter, Space or Down opens on the first item; Up opens on the last; Escape closes and returns focus |
+| Combobox | Down opens the list, Enter accepts, Escape closes back to the input; focus stays in the input (`aria-activedescendant`) |
+| Listbox, radio group | Arrows move the selection; one tab stop |
+
+**P-A11Y-04 Focus moves with the user.** Dialogs trap focus, make the page behind `inert`, and return focus to the trigger on close (native `<dialog>` with `showModal()` does all three). A client-side route change updates `document.title` and moves focus to the new view's `<h1>` (with `tabindex="-1"`) or `<main>`.
+
+**P-A11Y-05 Skip link and landmarks.** The first focusable element is "Skip to content", hidden until focused, pointing at `<main id="main">`. One `<main>`. Headings describe their sections and form an outline.
+
+**P-A11Y-06 Targets.** The AA floor is 24×24px (2.5.8); Turbo's target is 40px on desktop and 44px on touch (P-LAY-02). Every drag has a single-pointer alternative (2.5.7).
+
+**P-A11Y-07 Every control has a name.** Inputs have a visible `<label>`; the label and the control share one hit area. Icon-only buttons have an `aria-label` that names the action ("Delete project", never "Trash icon"). When a control has visible text, its accessible name starts with that text. `aria-hidden` never sits on, or above, anything focusable.
+
+**P-A11Y-08 Forms that work with tools.** A real `<form>`, a valid `autocomplete` token on every field about the person (1.3.5: `email`, `name`, `current-password`, `new-password`, `one-time-code`…), and the `type` and `inputmode` that bring up the right keyboard (`inputmode="numeric"` for codes, `"decimal"` for money). `spellcheck="false"` on emails, codes and usernames. Never block paste.
+
+**P-A11Y-09 Errors that announce.** Validate on submit. Failing fields get `aria-invalid="true"` and `aria-describedby` pointing at the error under them; focus moves to the first one. While a request runs, the button keeps its label with the spinner beside it, takes `aria-disabled="true"` (not `disabled`, which drops focus) and ignores repeat presses. Warn before leaving unsaved changes; a re-render never wipes what was typed.
+
+**P-A11Y-10 Announce what changes.** Toasts, "Saved" and result counts go through a polite region (`role="status"`) that is already in the DOM, empty, before its text changes. `role="alert"` is for urgent errors not tied to a field, nothing else. Never move focus to a toast. A region that's loading takes `aria-busy="true"`, then announces the outcome ("12 results").
+
+**P-A11Y-11 Nothing important runs on a timer.** A toast with an action or an error stays until dismissed. A plain confirmation toast stays at least 5 seconds and pauses while hovered or focused. Anything that moves or updates on its own for more than 5 seconds has a visible pause (2.2.2).
+
+**P-A11Y-12 Contrast.** Text 4.5:1, large text (24px, or 18.67px bold) 3:1, component boundaries, states and meaningful graphics 3:1 (1.4.3, 1.4.11). Measure the pair as it renders, on the surface it actually sits on, in both themes. Disabled controls and logos are exempt. Colour never carries meaning alone (1.4.1; design-system.md).
+
+**P-A11Y-13 Alt text by purpose.** Decorative: `alt=""` (present, empty). Informative: what it means. Functional (the image is the button or link): the action. A chart: a one-line summary, with the data in a table or text nearby. Never leave `alt` off.
+
+**P-A11Y-14 Zoom and reflow.** Text survives 200% resize (1.4.4), and the page reflows at 320px wide with no sideways scroll (1.4.10). Never `maximum-scale=1` or `user-scalable=no`.
+
+**P-A11Y-15 Disabled means unavailable.** Native `disabled` only when the control truly can't be used. If it needs to stay focusable (to show why it's off), use `aria-disabled="true"`, block its behaviour in code and say why in text beside it; tooltips on a natively disabled control never show.
+
+## Writing
+
+These extend Writing in `taste.md`.
+
+**P-WRI-01 Inventory first.** Before writing a string, find where copy lives (locale files, `t(` calls, the CMS) and list the noun for each object and the verb for each action. New copy uses those words. A multi-step flow keeps one set: Get started, Continue, Done.
+
+**P-WRI-02 Build strings whole.** Never glue a sentence around a variable (`"You have " + n + " messages"`). One message with placeholders and the locale's plural rules (ICU `{count, plural, one {# message} other {# messages}}`, or `Intl.PluralRules`). Many languages have more than two forms.
+
+**P-WRI-03 Format through `Intl`.** Numbers, currency, units, dates, relative times and lists go through `Intl` with the user's locale (`NumberFormat`, `DateTimeFormat`, `RelativeTimeFormat`, `ListFormat`). Never hand-build a date or join names with ", " and " and ".
+
+**P-WRI-04 One case per element type.** Sentence case everywhere unless the project set another policy. "Save Changes" beside "Discard changes" is a bug.
+
+**P-WRI-05 Words for the device.** "Tap" on touch, "click" with a pointer, "select" when either. No idioms or jokes that won't translate. Possessives sparingly ("Favorites", not "Your favorites"), and never "My" and "Your" in one flow.
+
+**P-WRI-06 Errors phrased as the fix.** "Use at least 8 characters", not "Password too short" and not "Don't use fewer than 8". "Enter a date as DD/MM/YYYY", not "Invalid date". If the same error keeps firing, change the interaction so it can't happen.
+
+**P-WRI-07 Destructive copy.**
+
+| Case | Copy |
+| --- | --- |
+| Reversible and frequent | Act at once; toast "Project archived" with Undo |
+| Irreversible, one item | Title "Delete 'Q3 report'?"; body says what goes with it, with counts; buttons "Delete report", "Cancel" |
+| Irreversible, many | "Delete 12 files?"; "You can't undo this."; "Delete 12 files" |
+| Affects others | The body names who: "8 members lose access." |
+| A workspace, account or repo | Type its name to confirm; the button stays off until it matches |
+
+**P-WRI-08 Status copy.**
+
+| State | Pattern |
+| --- | --- |
+| Working | -ing verb and object: "Saving changes…" |
+| Done | Object and past verb: "Changes saved" |
+| Failed | What didn't happen, then the next step: "Changes not saved. Check your connection and try again." |
+| Unavailable | Why, and what unlocks it, beside the control: "Add a payment method to publish" |
+| Partial | Both counts: "9 of 12 uploaded. Retry 3" |
+
+**P-WRI-09 Links and settings.** Repeated "Learn more" links each say what about ("Learn more about exports"). Link straight to a setting instead of describing the path to it. A filtered empty state names the query: "No results for 'quarterly'. Clear filters". Never keep lasting information in an empty state; it disappears once content arrives.
+
 ## Sound
 
 **P-SND-01 Interface sounds.** Off by default. Where a client turns them on: only to confirm an action the user just took (sent, done, error), never for passive events; under 200ms, quiet, and the same sound for the same meaning everywhere. Always a setting to turn them off, and silent when the system is muted.
@@ -217,20 +357,24 @@ Check: toggle twice fast (it reverses from where it is); tap five times fast (ev
 
 ## Review pass
 
-Walk this in order on any screen before calling it done. Each line names the rules it checks.
+Walk this in order on any screen before calling it done. Foundations first, so polish doesn't hide a broken flow. Each line names the rules it checks.
 
-1. Squint: one thing to look at first. (taste.md)
-2. Every changing or stacked number holds still and lines up. (P-TYPE-01, P-DAT-03)
-3. Headings balance, paragraphs have no orphan, text is antialiased. (P-TYPE-02, P-TYPE-03)
-4. Every icon looks centred, and buttons with icons look evenly padded. (P-ALN-01 to 04)
-5. No nested pair has a thick rim at the corner. (P-LAY-01)
-6. Every image has its inner edge; nothing has a border beside a shadow. (P-COL-02, P-COL-03)
-7. Every scroll container fades only where there's more. (P-LAY-03)
-8. Overscroll in dark Safari shows no white. (P-COL-05)
-9. Every control presses, nothing scales that shouldn't, every target is at least 40px. (P-MOT-01, P-LAY-02)
-10. Toggle everything twice fast: it reverses from where it is, no click is dropped. (P-MOT-02)
-11. Sweep the pointer across every list: nothing trails. Use the shortcuts: nothing waits. (P-MOT-03)
-12. Reload: nothing moves that you didn't ask for. (P-MOT-10)
-13. Turn on reduced motion and run 9 to 12 again.
+1. Tab through the whole flow: every stop has a visible ring, nothing is unreachable or hidden under a sticky bar, Escape closes what opened last. (P-A11Y-02 to 05)
+2. Every control has a name and a label; icon buttons name the action. (P-A11Y-07)
+3. Submit an empty form: errors sit beside their fields, focus lands on the first, nothing is disabled up front. (P-A11Y-09, P-WRI-06)
+4. Zoom to 200% and narrow to 320px: nothing clips, nothing scrolls sideways, actions stay reachable. (P-A11Y-14, P-LAY-13)
+5. Squint: one thing to look at first. (taste.md)
+6. Every changing or stacked number holds still and lines up. (P-TYPE-01, P-DAT-03)
+7. Headings balance, paragraphs have no orphan, line-heights fit their role, nothing under 18px is thin. (P-TYPE-03, P-TYPE-07, P-TYPE-08)
+8. Every icon looks centred, and buttons with icons look evenly padded. (P-ALN-01 to 04)
+9. No nested pair has a thick rim at the corner; groups are spaced at least twice their inside gap. (P-LAY-01, P-LAY-06)
+10. Every image has its inner edge; nothing has a border beside a shadow; shadow-only edges survive forced colours. (P-COL-02, P-COL-03, P-DET-04)
+11. Every scroll container fades only where there's more, and overlays don't scroll the page. (P-LAY-03, P-DET-03)
+12. Overscroll in dark Safari shows no white; switching theme doesn't smear. (P-COL-05, P-DET-01)
+13. Every control presses, nothing scales that shouldn't, every target is at least 40px. (P-MOT-01, P-LAY-02)
+14. Toggle everything twice fast: it reverses from where it is, no click is dropped. (P-MOT-02)
+15. Sweep the pointer across every list: nothing trails. Use the shortcuts: nothing waits. On a phone, nothing stays stuck in hover. (P-MOT-03, P-DET-02)
+16. Reload: nothing moves that you didn't ask for. Turn on reduced motion and run 13 to 15 again. (P-MOT-10)
+17. Read every string: one vocabulary, one case, verbs on buttons, no sentence glued around a variable, dates and numbers formatted by locale. (P-WRI-01 to 05)
 
-Report findings as a table: severity, `file:line`, rule ID, what's there, the fix.
+Report findings as a table: severity, `file:line`, rule ID, what's there, the fix. Severity is user impact: HIGH blocks a task, hides content or is a WCAG failure; MEDIUM makes it meaningfully harder; LOW is polish. One root cause is one finding with every location listed. A review changes nothing unless asked to fix.

@@ -15,7 +15,7 @@ The package is the studio default. Each client gets a file in `clients/` that se
 | --- | --- |
 | Any UI work: designing, building or reviewing | [`taste.md`](taste.md) (what good looks like), then [`design-system.md`](design-system.md) (what to build with) |
 | Anything that moves: an entrance, an exit, a hover, a gesture, a change of size | [`motion.md`](motion.md) as well |
-| Polishing or reviewing details (numbers, alignment, corners, edges, scroll fades, press, hover, data) | [`polish.md`](polish.md): rules by ID, and the review pass at its end |
+| Polishing or reviewing details (type, alignment, layout, motion, accessibility, copy, data) | [`polish.md`](polish.md): rules by ID, and the review pass at its end |
 | Work on a specific client | `clients/<client>.md` first, for their brand values and product rules |
 
 ## Order of precedence
@@ -59,5 +59,5 @@ A client file can change a value (a font, a colour, a radius step). It can't rel
 | `taste.md` | What good looks like: the feel, the five rules, the details, writing, AI moments, don'ts, pre-ship checklist |
 | `design-system.md` | How to build it: token architecture, type, colour, radius, elevation, spacing, icons, components by role, accessibility |
 | `motion.md` | How it moves: principles, tokens, recipes, rules, gestures, reduced motion, earned exceptions |
-| `polish.md` | Polish rules with IDs: principles, typography, icons and alignment, colour and surfaces, layout, motion, sound, data, and a 13-step review pass |
+| `polish.md` | Polish rules with IDs: principles, typography, icons and alignment, colour and surfaces, layout, motion, details, accessibility, writing, sound, data, and a 17-step review pass |
 | `clients/_template.md` | Start a new client file from this |

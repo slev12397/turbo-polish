@@ -63,7 +63,7 @@ The values the shared components use. Building something similar: copy the neare
 | Pill into card | One surface changing size, not one leaving and another arriving: measured width and height ease (280ms `ease-enter` opening, 180ms folding), anchored, clipped so the larger face is revealed. The old face fades at once (120ms); the new one fades and rises 6px a beat behind (60ms) | The same, reversed | |
 | Side panel | A FLIP: the panel takes its width at once and slides in from the window's edge over 280ms, `ease-enter`, while the content beside it, rewrapped once at its new width, glides to its place on the same curve. Nothing squeezes frame by frame | Closes over 180ms | Resizes from its edge 1:1 while dragging. Under 1024px it is a wide drawer |
 | Suggestions shuffle | Each new row fades in and rises 4px in 180ms, 40ms after the one above; the last lands by 300ms | Replaced at once | The model stagger: a few items, landing within 300ms |
-| Toast | The toast library's own motion, left as it ships | | |
+| Toast | The toast library's own motion, left as it ships | | A toast with an action or an error stays until dismissed; a plain one stays at least 5s and pauses on hover or focus (P-A11Y-11) |
 | Spinner | The one loop for a control: a steady turn with a 1400ms stretch | | Rests as a short arc under reduced motion |
 | Skeleton | A muted bar over exactly the content's box, swept by a soft band on a 1400ms loop. When the content arrives the bar fades out as it fades in, 180ms, `ease-enter`; nothing moves | | A plain bar under reduced motion. Several arriving together come 120ms apart |
 | Icon swap (copy to check, play to pause) | Cross-fade in place, 120ms, `ease-enter`: the new icon from 75% and a 4px blur | The old icon to 75% and a 4px blur, 120ms | The one use of `filter` in product motion; icons 24px and under. See P-MOT-08 in `polish.md` |
@@ -139,4 +139,3 @@ Typical examples: an onboarding reward, a once-per-workspace reveal, a cursor st
 ## Not covered yet
 
 - Toast motion is the library's default, not our tokens.
-- Whether toasts with an error or an action should stay until dismissed is undecided.
